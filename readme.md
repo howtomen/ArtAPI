@@ -12,7 +12,7 @@
 - /objects/{id} DELETE deletes specific Art Object
 
 <h3>TODO</h3 
-    <text >           
+    <text>           
 - Create stored procedures to address Deletion creating gap in key<br>
 - Create search based off any attribute.<br>
 - Fix update to only update fields that are provided. <br>
