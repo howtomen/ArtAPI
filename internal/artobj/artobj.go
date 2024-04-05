@@ -1,6 +1,14 @@
-package models
+package artobj
 
-// This is an individual Art Object Record in the form of a Struct  
+import (
+	"context"
+	"fmt"
+)
+
+type Store interface {
+	GetArt(context.Context, string) (ArtObject, error)
+}
+// This is an individual Art Object Record in the form of a Struct
 type ArtObject struct {
 	ID int `json:"id" db:"id"` 
 	ObjectID int `json:"object_id" db:"object_id"`
@@ -15,4 +23,27 @@ type ArtObject struct {
 	ArtistDisplayName string `json:"artist_display_name" db:"artist_display_name"`
 	City string `json:"city" db:"city"`
 	Country string `json:"country" db:"country"`
+}
+
+//Service - the struct on which all of our logic will be built ontop of
+type Service struct{
+	Store Store
+}
+
+//NewService - returns pointer to new service
+func NewService(store Store) *Service {
+	return &Service{
+		Store: store,
+	}
+}
+
+func (s *Service) GetArt(ctx context.Context, id string) (ArtObject, error) {
+	fmt.Println("Getting Art Object")
+	art, err := s.Store.GetArt(ctx,id)
+	if err != nil {
+		fmt.Println(err)
+		return ArtObject{},err
+	}
+	
+	return art, nil 
 }
