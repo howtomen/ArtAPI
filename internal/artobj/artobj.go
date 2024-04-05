@@ -2,9 +2,17 @@ package artobj
 
 import (
 	"context"
+	"errors"
 	"fmt"
 )
 
+var (
+	ErrFetchingArt = errors.New("failed to fetch art record by id")
+	ErrNotImplemented = errors.New("not implemented")
+)
+
+//Store - This interface defines all methods
+// that our service needs to operate.
 type Store interface {
 	GetArt(context.Context, string) (ArtObject, error)
 }
@@ -42,8 +50,20 @@ func (s *Service) GetArt(ctx context.Context, id string) (ArtObject, error) {
 	art, err := s.Store.GetArt(ctx,id)
 	if err != nil {
 		fmt.Println(err)
-		return ArtObject{},err
+		return ArtObject{},ErrFetchingArt
 	}
 	
 	return art, nil 
+}
+
+func (s *Service) UpdateArt(ctx context.Context, art ArtObject) error {
+	return ErrNotImplemented
+}
+
+func (s *Service) DeleteArt(ctx context.Context, id string) error {
+	return ErrNotImplemented
+}
+
+func (s *Service) CreateArt(ctx context.Context, art ArtObject) (ArtObject, error) {
+	return ArtObject{}, ErrNotImplemented
 }
