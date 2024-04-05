@@ -10,14 +10,13 @@ import (
 )
 
 func NewDbConnection() *sqlx.DB {
-	db, err := sqlx.Open("postgres", "dbname=go_db user=postgres password=postgres port=5432 dbname=postgres sslmode=disable")
+	db, err := sqlx.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	//check if table exists, if not create table. 
-	tableName := "art_vault"
-	exists, err := tableExists(db, tableName)
+	//check if table exists, if not create table.
+	exists, err := tableExists(db, "art_vault")
 	if err != nil {
 		log.Fatal(err)
 	}
