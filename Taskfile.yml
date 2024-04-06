@@ -13,5 +13,10 @@ tasks:
   run:
     cmds:
       - docker-compose up --build
-
+  run-db:
+    cmds:
+    - docker-compose up db -d
+  run-app:
+    cmds:
+    - docker-compose up api -d
       
