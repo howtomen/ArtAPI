@@ -25,25 +25,43 @@ type ArtRow struct {
 
 func convertArtRowtoArtObj(row ArtRow) artobj.ArtObject {
 	return artobj.ArtObject{
-		ID: row.ID,
-		ObjectID: row.ObjectID,
-		IsHighlight: row.IsHighlight,
-		AccessionYear: row.AccessionYear.String,
-		PrimaryImage: row.AccessionYear.String,
-		Department: row.Department.String,
-		Title: row.Title.String,
-		ObjectName: row.ObjectName.String,
-		Culture: row.Culture.String,
-		Period: row.Period.String,
-		City: row.City.String,
-		Country: row.Country.String,
+		ID: 				row.ID,
+		ObjectID: 			row.ObjectID,
+		IsHighlight: 		row.IsHighlight,
+		AccessionYear: 		row.AccessionYear.String,
+		PrimaryImage: 		row.PrimaryImage.String,
+		Department: 		row.Department.String,
+		Title: 				row.Title.String,
+		ObjectName: 		row.ObjectName.String,
+		Culture: 			row.Culture.String,
+		Period: 			row.Period.String,
+		ArtistDisplayName: 	row.ArtistDisplayName.String,
+		City: 				row.City.String,
+		Country: 			row.Country.String,
 	}
 }
 
-func (d *Database) GetArt(
-	ctx context.Context,
-	id int,
-) (artobj.ArtObject, error) {
+func convertObjToRow(art artobj.ArtObject) ArtRow {
+	row := ArtRow{
+		ID: 				art.ID,
+		ObjectID: 			art.ObjectID,
+		IsHighlight: 		art.IsHighlight,
+		AccessionYear: 		sql.NullString{String:art.AccessionYear, Valid: true},
+		PrimaryImage:		sql.NullString{String:art.PrimaryImage, Valid: true},
+		Department: 		sql.NullString{String:art.Department, Valid: true},
+		Title: 				sql.NullString{String:art.Title, Valid: true},
+		ObjectName: 		sql.NullString{String:art.ObjectName, Valid: true},
+		Culture: 			sql.NullString{String:art.Culture, Valid: true},
+		Period: 			sql.NullString{String:art.Period, Valid: true},
+		ArtistDisplayName:	sql.NullString{String:art.ArtistDisplayName, Valid: true},
+		City: 				sql.NullString{String:art.City, Valid: true},
+		Country: 			sql.NullString{String:art.Country, Valid: true},
+
+	}
+	return row
+}
+
+func (d *Database) GetArt(ctx context.Context, id int,) (artobj.ArtObject, error) {
 	var artRow ArtRow
 	row := d.Client.QueryRowxContext(
 		ctx,
@@ -57,4 +75,50 @@ func (d *Database) GetArt(
 		return artobj.ArtObject{}, fmt.Errorf("error fetching art object by id: %w", err)
 	}
 	return convertArtRowtoArtObj(artRow), nil 
+}
+
+func (d *Database) PostArt(ctx context.Context, art artobj.ArtObject) (artobj.ArtObject, error) {
+	postRow := convertObjToRow(art)
+
+	_, err := d.Client.NamedExecContext(
+		ctx,
+		"INSERT INTO art_vault (object_id,is_highlight,accession_year,primary_image,department,title,object_name,culture,period,artist_display_name,city,country) VALUES (:object_id,:is_highlight,:accession_year,:primary_image,:department,:title,:object_name,:culture,:period,:artist_display_name,:city,:country);",
+		postRow,
+	)
+	if err != nil {
+		return artobj.ArtObject{}, fmt.Errorf("failed to insert comment: %w", err)
+	}
+
+	return art, nil 
+}
+
+func (d *Database) DeleteArt(ctx context.Context, id int) error {
+	_, err := d.Client.ExecContext(
+		ctx,
+		`DELETE FROM art_vault WHERE id = $1`,
+		id,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to delete art record from database: %w", err)
+	}
+
+	return nil
+}
+
+func (d *Database) UpdateArt(ctx context.Context, id int, art artobj.ArtObject) (artobj.ArtObject, error) {
+	art.ID = id
+	artRow := convertObjToRow(art)
+	rows, err := d.Client.NamedQueryContext(
+		ctx,
+		`UPDATE art_vault SET object_id = :object_id,is_highlight = :is_highlight,accession_year = :accession_year,primary_image = :primary_image,department = :department,title = :title,object_name = :object_name,culture = :culture,period = :period,artist_display_name = :artist_display_name,city = :city,country = :country WHERE id=:id;`,
+		artRow, 
+	)
+
+	if err != nil {
+		return artobj.ArtObject{}, fmt.Errorf("failed to update comment: %w", err)
+	}
+	if err := rows.Close(); err != nil {
+		return artobj.ArtObject{}, fmt.Errorf("failed to close rows: %w", err)
+	}
+	return art, nil 
 }

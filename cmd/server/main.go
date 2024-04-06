@@ -22,9 +22,15 @@ func Run() error {
 	}
 
 	artServ := artobj.NewService(db)
-	fmt.Println(artServ.GetArt(
+	obj, _ := artServ.GetArt(
 		context.Background(),
 		1,
+	)
+	obj.ObjectName = "UpdateCheck"
+	fmt.Println(artServ.UpdateArt(
+		context.Background(),
+		3,
+		obj,
 	))
 	return nil
 }

@@ -9,12 +9,17 @@ import (
 var (
 	ErrFetchingArt = errors.New("failed to fetch art record by id")
 	ErrNotImplemented = errors.New("not implemented")
+	ErrPostingArt = errors.New("failed to upload art record to database")
+	ErrUpdatingRow = errors.New("failed to update record in database")
 )
 
 //Store - This interface defines all methods
 // that our service needs to operate.
 type Store interface {
 	GetArt(context.Context, int) (ArtObject, error)
+	PostArt(context.Context, ArtObject) (ArtObject, error)
+	UpdateArt(context.Context, int, ArtObject) (ArtObject, error)
+	DeleteArt(context.Context, int) (error)
 }
 // This is an individual Art Object Record in the form of a Struct
 type ArtObject struct {
@@ -56,14 +61,26 @@ func (s *Service) GetArt(ctx context.Context, id int) (ArtObject, error) {
 	return art, nil 
 }
 
-func (s *Service) UpdateArt(ctx context.Context, art ArtObject) error {
-	return ErrNotImplemented
+func (s *Service) UpdateArt(ctx context.Context, id int, art ArtObject) (ArtObject, error) {
+	fmt.Println("Getting Art Object")
+	response, err := s.Store.UpdateArt(ctx,id,art)
+	if err != nil {
+		fmt.Println(err)
+		return ArtObject{},ErrUpdatingRow
+	}
+	return response, nil  
 }
 
 func (s *Service) DeleteArt(ctx context.Context, id int) error {
-	return ErrNotImplemented
+	return s.Store.DeleteArt(ctx, id)
 }
 
-func (s *Service) CreateArt(ctx context.Context, art ArtObject) (ArtObject, error) {
-	return ArtObject{}, ErrNotImplemented
+func (s *Service) PostArt(ctx context.Context, art ArtObject) (ArtObject, error) {
+	fmt.Println("Posting Art Object")
+	res, err := s.Store.PostArt(ctx,art)
+	if err != nil {
+		fmt.Println(err)
+		return ArtObject{}, ErrPostingArt
+	}
+	return res, nil
 }
