@@ -1,25 +1,38 @@
 services:
-  go-app:
+  db:
+    container_name: art-database
+    image: postgres:12.2-alpine
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - fullstack
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
     container_name: art_api
-    image: killaheroz/art_api:1.0.0
     build: .
     environment:
-      DATABASE_URL: "host=go_db user=postgres password=postgres dbname=postgres sslmode=disable"
+      DB_USERNAME: "postgres"
+      DB_PASSWORD: "postgres"
+      DB_DB: "postgres"
+      DB_HOST: "db"
+      DB_TABLE: "art_vault"
+      DB_PORT: "5432"
+      SSL_MODE: "disable"
     ports:
       - "8000:8000"
     depends_on:
-      - go_db
-  go_db:
-    container_name: go_db
-    image: postgres:12
-    environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    
+      - db
+    networks:
+      - fullstack
 volumes:
   pgdata: {}
+
+networks:
+  fullstack:
+    driver: bridge

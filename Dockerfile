@@ -1,15 +1,17 @@
-FROM golang:1.22.1
+FROM golang:1.22.1 AS builder
 
-LABEL maintainer="Daniel Ariza"
-
+RUN mkdir /app
+ADD . /app
 WORKDIR /app
 
-COPY . . 
+RUN CGO_ENABLED=0 GOOS=linux go build -o app cmd/server/main.golang
 
-RUN go mod download
+# this is to reduce size of env needed to execute binary that is made above
+# alpine image is a lot lighter than golang image used above 
+# This creates a smaller container size.
+FROM alpine:latest AS production
+COPY --from=builder /app .
+CMD [ "./app" ]
 
-RUN go build -o api 
 
-EXPOSE 8000
-
-CMD ["./api"]
+LABEL maintainer="Daniel Ariza"
