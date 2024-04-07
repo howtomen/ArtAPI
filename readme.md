@@ -23,17 +23,17 @@
 **Art Object  JSON Structure:**
 ```
 {
-    "object_id": 1,  //int   
-    "is_highlight": "False", //string
-    "accession_year": "2024", //string
-    "department": "The American Wing", //string
-    "title": "One-dollar Liberty Head Coin",  //string
-    "object_name": "Coin",  //string
-    "culture": "American",  /string
-    "period": "Modern", //string
+    "object_id": 1,                                 //int   
+    "is_highlight": "False",                        //string
+    "accession_year": "2024",                       //string
+    "department": "The American Wing",              //string
+    "title": "One-dollar Liberty Head Coin",        //string
+    "object_name": "Coin",                          //string
+    "culture": "American",                          //string
+    "period": "Modern",                             //string
     "artist_display_name": "James Barton Longacre", //string
-    "city": "New York", //string 
-    "country": "Unites States" //string 
+    "city": "New York",                             //string 
+    "country": "Unites States"                      //string 
 }
 ```
 
