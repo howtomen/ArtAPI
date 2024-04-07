@@ -3,10 +3,11 @@ package main
 import (
 	db "ArtAPI/internal/DB"
 	"ArtAPI/internal/artobj"
-	// "ArtAPI/routers"
+	transportHttp "ArtAPI/internal/transport/http"
 	// "ArtAPI/routers/middleware"
-	"context"
+	// "context"
 	"fmt"
+
 	// "log"
 	// "net/http"
 )
@@ -23,10 +24,12 @@ func Run() error {
 	}
 
 	artServ := artobj.NewService(db)
-	objs, _ := artServ.GetAllArt(
-		context.Background(),
-	)
-	fmt.Println(objs)
+
+	httpHandler := transportHttp.NewHandler(artServ)
+	if err := httpHandler.Serve(); err != nil {
+		return err
+	}
+
 	return nil
 }
 func main() {
