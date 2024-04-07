@@ -61,6 +61,27 @@ func convertObjToRow(art artobj.ArtObject) ArtRow {
 	return row
 }
 
+func (d *Database) GetAllArt(ctx context.Context) ([]artobj.ArtObject, error) {
+	var allArt []artobj.ArtObject
+	rows, err := d.Client.Queryx("SELECT * FROM art_vault")
+	if err != nil {
+		return allArt, fmt.Errorf("error fetching all art objects: %w", err)
+	}
+
+	for rows.Next() {
+		row := ArtRow{}
+		if err := rows.StructScan(&row); err != nil {
+			return allArt, fmt.Errorf("error scanning row: %w", err)
+		}
+		allArt = append(allArt, convertArtRowtoArtObj(row))
+	}
+
+	if err := rows.Close(); err != nil {
+		return allArt, fmt.Errorf("failed to close rows: %w", err)
+	}	
+	return allArt, nil 
+} 
+
 func (d *Database) GetArt(ctx context.Context, id int,) (artobj.ArtObject, error) {
 	var artRow ArtRow
 	row := d.Client.QueryRowxContext(

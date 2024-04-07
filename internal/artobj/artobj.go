@@ -6,7 +6,10 @@ import (
 	"fmt"
 )
 
+// using these to pass info on what went wrong
+// without exposing internal errors to client.
 var (
+	ErrFetchingAllArt = errors.New("failed to get all art records")
 	ErrFetchingArt = errors.New("failed to fetch art record by id")
 	ErrNotImplemented = errors.New("not implemented")
 	ErrPostingArt = errors.New("failed to upload art record to database")
@@ -16,6 +19,7 @@ var (
 //Store - This interface defines all methods
 // that our service needs to operate.
 type Store interface {
+	GetAllArt(context.Context) ([]ArtObject, error)
 	GetArt(context.Context, int) (ArtObject, error)
 	PostArt(context.Context, ArtObject) (ArtObject, error)
 	UpdateArt(context.Context, int, ArtObject) (ArtObject, error)
@@ -50,12 +54,23 @@ func NewService(store Store) *Service {
 	}
 }
 
+func (s *Service) GetAllArt(ctx context.Context) ([]ArtObject, error) {
+	fmt.Println("Getting All Art Objects in vault") 
+	art, err := s.Store.GetAllArt(ctx)
+	if err != nil{
+		fmt.Println(err)
+		return []ArtObject{}, ErrFetchingAllArt
+	}
+
+	return art, nil 
+}
+
 func (s *Service) GetArt(ctx context.Context, id int) (ArtObject, error) {
 	fmt.Println("Getting Art Object")
 	art, err := s.Store.GetArt(ctx,id)
 	if err != nil {
 		fmt.Println(err)
-		return ArtObject{},ErrFetchingArt
+		return ArtObject{},ErrFetchingArt 
 	}
 	
 	return art, nil 
