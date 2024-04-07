@@ -77,7 +77,7 @@ func (s *Service) GetArt(ctx context.Context, id int) (ArtObject, error) {
 }
 
 func (s *Service) UpdateArt(ctx context.Context, id int, art ArtObject) (ArtObject, error) {
-	fmt.Println("Getting Art Object")
+	fmt.Println("Updating Art Object")
 	response, err := s.Store.UpdateArt(ctx,id,art)
 	if err != nil {
 		fmt.Println(err)
@@ -87,6 +87,7 @@ func (s *Service) UpdateArt(ctx context.Context, id int, art ArtObject) (ArtObje
 }
 
 func (s *Service) DeleteArt(ctx context.Context, id int) error {
+	fmt.Println("Deleting Art Object")
 	return s.Store.DeleteArt(ctx, id)
 }
 
