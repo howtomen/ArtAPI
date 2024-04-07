@@ -12,8 +12,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type ArtService interface{}
-
 type Handler struct {
 	Router  *mux.Router
 	Service ArtService
@@ -40,6 +38,11 @@ func (h *Handler) mapRoutes () {
 	h.Router.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "hello world")
 	})
+	h.Router.HandleFunc("/api/v3/art", h.GetAllArt).Methods("GET")
+	h.Router.HandleFunc("/api/v3/art/{id}", h.GetArt).Methods("GET")
+	h.Router.HandleFunc("/api/v3/art", h.PostArt).Methods("POST")
+	h.Router.HandleFunc("/api/v3/art/{id}", h.UpdateArt).Methods("PUT")
+	h.Router.HandleFunc("/api/v3/art/{id}", h.DeleteArt).Methods("DELETE")
 }
 
 func (h *Handler) Serve() error {
