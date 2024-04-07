@@ -5,13 +5,13 @@
 <h3>API Design</h3>
 
 - Made up of HTTP Layer, Service Layer, and Repository Layer
-- - Service Layer hold business logic
-- - HTTP layer takes incoming requests and responds appropriately
-- - Repo Layer interacts with DB
+    - Service Layer hold business logic
+    - HTTP layer takes incoming requests and responds appropriately
+    - Repo Layer interacts with DB
 - Comes with Dockerfile, docker compose file and Tasker File
-- - Dockerfile creates docker image and runs container after build
-- - docker compose file sets up network, declares base DB image and volumes , Env variables needed for DB and App
-- - Tasker file creates shortcut commanda to do things such as run, build, test, run-app, run-db amongst others. Will expand on these at a later time.  
+    - Dockerfile creates docker image and runs container after build
+    - docker compose file sets up network, declares base DB image and volumes , Env variables needed for DB and App
+    - Tasker file creates shortcut commanda to do things such as run, build, test, run-app, run-db amongst others. Will expand on these at a later time.  
 
 <h3>API EndPoints</h3>
 
