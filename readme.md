@@ -34,7 +34,7 @@
 ```
 {
     "object_id": 1,                                 //int   
-    "is_highlight": "False",                        //string
+    "is_highlight": false,                          //bool
     "accession_year": "2024",                       //string
     "department": "The American Wing",              //string
     "title": "One-dollar Liberty Head Coin",        //string
