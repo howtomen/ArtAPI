@@ -11,27 +11,22 @@ import (
 	// "net/http"
 )
 func Run() error {
-	fmt.Println("This is eventually going to run the Application.")
+	fmt.Println("Starting up App Application")
 	db, err := db.NewDbConnection()
 	if err != nil {
 		fmt.Println("Failed to connect to DB")
 		return err
 	}
-	if err := db.Ping(context.Background()); err != nil {
-		return err
+	if err := db.MigrateDB(); err != nil {
+		fmt.Println("failed to migrate db")
+		return err 
 	}
 
 	artServ := artobj.NewService(db)
-	obj, _ := artServ.GetArt(
+	objs, _ := artServ.GetAllArt(
 		context.Background(),
-		1,
 	)
-	obj.ObjectName = "UpdateCheck"
-	fmt.Println(artServ.UpdateArt(
-		context.Background(),
-		3,
-		obj,
-	))
+	fmt.Println(objs)
 	return nil
 }
 func main() {

@@ -1,4 +1,7 @@
-CREATE TABLE art_vault
+-- naming 0001 since the migration library uses that 
+-- naming convention to dictate execution order
+-- this is also why there is a .up and .down
+CREATE TABLE IF NOT EXISTS art_vault
 (
   "id" SERIAL PRIMARY KEY,
   "object_id" bigint NOT NULL,
@@ -14,5 +17,4 @@ CREATE TABLE art_vault
   "city" text,
   "country" text
 );
-
 
