@@ -3,7 +3,7 @@
 -- this is also why there is a .up and .down
 CREATE TABLE IF NOT EXISTS art_vault
 (
-  "id" SERIAL PRIMARY KEY,
+  "id" uuid PRIMARY KEY,
   "object_id" bigint NOT NULL,
   "is_highlight" boolean DEFAULT false NOT NULL,
   "accession_year" text,

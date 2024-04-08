@@ -5,10 +5,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 type ArtRow struct {
-	ID                int `db:"id"`
+	ID                string `db:"id"`
 	ObjectID          int `db:"object_id"`
 	IsHighlight       bool `db:"is_highlight"`
 	AccessionYear     sql.NullString `db:"accession_year"`
@@ -82,7 +84,7 @@ func (d *Database) GetAllArt(ctx context.Context) ([]artobj.ArtObject, error) {
 	return allArt, nil 
 } 
 
-func (d *Database) GetArt(ctx context.Context, id int,) (artobj.ArtObject, error) {
+func (d *Database) GetArt(ctx context.Context, id string,) (artobj.ArtObject, error) {
 	var artRow ArtRow
 	row := d.Client.QueryRowxContext(
 		ctx,
@@ -99,11 +101,12 @@ func (d *Database) GetArt(ctx context.Context, id int,) (artobj.ArtObject, error
 }
 
 func (d *Database) PostArt(ctx context.Context, art artobj.ArtObject) (artobj.ArtObject, error) {
+	art.ID = uuid.NewString() //generate uuid string 
 	postRow := convertObjToRow(art)
 
 	_, err := d.Client.NamedExecContext(
 		ctx,
-		"INSERT INTO art_vault (object_id,is_highlight,accession_year,primary_image,department,title,object_name,culture,period,artist_display_name,city,country) VALUES (:object_id,:is_highlight,:accession_year,:primary_image,:department,:title,:object_name,:culture,:period,:artist_display_name,:city,:country);",
+		"INSERT INTO art_vault (id,object_id,is_highlight,accession_year,primary_image,department,title,object_name,culture,period,artist_display_name,city,country) VALUES (:id,:object_id,:is_highlight,:accession_year,:primary_image,:department,:title,:object_name,:culture,:period,:artist_display_name,:city,:country);",
 		postRow,
 	)
 	if err != nil {
@@ -113,7 +116,7 @@ func (d *Database) PostArt(ctx context.Context, art artobj.ArtObject) (artobj.Ar
 	return art, nil 
 }
 
-func (d *Database) DeleteArt(ctx context.Context, id int) error {
+func (d *Database) DeleteArt(ctx context.Context, id string) error {
 	_, err := d.Client.ExecContext(
 		ctx,
 		`DELETE FROM art_vault WHERE id = $1`,
@@ -126,7 +129,7 @@ func (d *Database) DeleteArt(ctx context.Context, id int) error {
 	return nil
 }
 
-func (d *Database) UpdateArt(ctx context.Context, id int, art artobj.ArtObject) (artobj.ArtObject, error) {
+func (d *Database) UpdateArt(ctx context.Context, id string, art artobj.ArtObject) (artobj.ArtObject, error) {
 	art.ID = id
 	artRow := convertObjToRow(art)
 	rows, err := d.Client.NamedQueryContext(

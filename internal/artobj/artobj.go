@@ -20,26 +20,26 @@ var (
 // that our service needs to operate.
 type Store interface {
 	GetAllArt(context.Context) ([]ArtObject, error)
-	GetArt(context.Context, int) (ArtObject, error)
+	GetArt(context.Context, string) (ArtObject, error)
 	PostArt(context.Context, ArtObject) (ArtObject, error)
-	UpdateArt(context.Context, int, ArtObject) (ArtObject, error)
-	DeleteArt(context.Context, int) (error)
+	UpdateArt(context.Context, string, ArtObject) (ArtObject, error)
+	DeleteArt(context.Context, string) (error)
 }
 // This is an individual Art Object Record in the form of a Struct
 type ArtObject struct {
-	ID 					int `json:"id"` 
-	ObjectID 			int `json:"object_id"`
-	IsHighlight 		bool `json:"is_highlight"`
-	AccessionYear 		string `json:"accession_year"`
-	PrimaryImage 		string `json:"primary_image"`
-	Department 			string `json:"department"`
-	Title 				string `json:"title"`
-	ObjectName 			string `json:"object_name"`
-	Culture	 			string `json:"culture"`
-	Period 				string `json:"period"`
-	ArtistDisplayName 	string `json:"artist_display_name"`
-	City 				string `json:"city"`
-	Country 			string `json:"country"`
+	ID 					string 	`json:"id"` 
+	ObjectID 			int 	`json:"object_id"`
+	IsHighlight 		bool 	`json:"is_highlight"`
+	AccessionYear 		string 	`json:"accession_year"`
+	PrimaryImage 		string 	`json:"primary_image"`
+	Department 			string	`json:"department"`
+	Title 				string 	`json:"title"`
+	ObjectName 			string 	`json:"object_name"`
+	Culture	 			string 	`json:"culture"`
+	Period 				string 	`json:"period"`
+	ArtistDisplayName 	string 	`json:"artist_display_name"`
+	City 				string 	`json:"city"`
+	Country 			string 	`json:"country"`
 }
 
 //Service - the struct on which all of our logic will be built ontop of
@@ -65,7 +65,7 @@ func (s *Service) GetAllArt(ctx context.Context) ([]ArtObject, error) {
 	return art, nil 
 }
 
-func (s *Service) GetArt(ctx context.Context, id int) (ArtObject, error) {
+func (s *Service) GetArt(ctx context.Context, id string) (ArtObject, error) {
 	fmt.Println("Getting Art Object")
 	art, err := s.Store.GetArt(ctx,id)
 	if err != nil {
@@ -76,7 +76,7 @@ func (s *Service) GetArt(ctx context.Context, id int) (ArtObject, error) {
 	return art, nil 
 }
 
-func (s *Service) UpdateArt(ctx context.Context, id int, art ArtObject) (ArtObject, error) {
+func (s *Service) UpdateArt(ctx context.Context, id string, art ArtObject) (ArtObject, error) {
 	fmt.Println("Updating Art Object")
 	response, err := s.Store.UpdateArt(ctx,id,art)
 	if err != nil {
@@ -86,7 +86,7 @@ func (s *Service) UpdateArt(ctx context.Context, id int, art ArtObject) (ArtObje
 	return response, nil  
 }
 
-func (s *Service) DeleteArt(ctx context.Context, id int) error {
+func (s *Service) DeleteArt(ctx context.Context, id string) error {
 	fmt.Println("Deleting Art Object")
 	return s.Store.DeleteArt(ctx, id)
 }
