@@ -4,12 +4,7 @@ import (
 	db "ArtAPI/internal/DB"
 	"ArtAPI/internal/artobj"
 	transportHttp "ArtAPI/internal/transport/http"
-	// "ArtAPI/routers/middleware"
-	// "context"
 	"fmt"
-
-	// "log"
-	// "net/http"
 )
 func Run() error {
 	fmt.Println("Starting up App Application")
@@ -33,7 +28,6 @@ func Run() error {
 	return nil
 }
 func main() {
-	//open connection to DB
 	if err := Run(); err != nil {
 		fmt.Println(err)
 	}
