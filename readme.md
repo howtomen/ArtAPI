@@ -7,6 +7,7 @@
 - Made up of HTTP Layer, Service Layer, and Repository Layer
     - Service Layer hold business logic
     - HTTP layer takes incoming requests and responds appropriately
+        - Includes Graceful Shutdown 
     - Repo Layer interacts with DB
 - Comes with Dockerfile, docker compose file and Tasker File
     - Dockerfile creates docker image and runs container after build

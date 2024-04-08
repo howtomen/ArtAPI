@@ -19,6 +19,10 @@ type ArtService interface {
 	DeleteArt(ctx context.Context, id int) (error)
 }
 
+type Response struct {
+	Message string
+}
+
 
 func (h *Handler) GetAllArt(w http.ResponseWriter, r *http.Request) {
 	art, err := h.Service.GetAllArt(r.Context())
@@ -107,5 +111,10 @@ func (h *Handler) DeleteArt(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
+	}
+
+	if err := json.NewEncoder(w).Encode(Response{Message: "Successfully deleted record"}); err != nil {
+		log.Print(err)
+		return 
 	}
 }
