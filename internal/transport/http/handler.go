@@ -43,7 +43,7 @@ func (h *Handler) mapRoutes () {
 	})
 	h.Router.HandleFunc("/api/v3/art", h.GetAllArt).Methods("GET")
 	h.Router.HandleFunc("/api/v3/art/{id}", h.GetArt).Methods("GET")
-	h.Router.HandleFunc("/api/v3/art", h.PostArt).Methods("POST")
+	h.Router.HandleFunc("/api/v3/art", JWTAuth(h.PostArt)).Methods("POST")
 	h.Router.HandleFunc("/api/v3/art/{id}", h.UpdateArt).Methods("PUT")
 	h.Router.HandleFunc("/api/v3/art/{id}", h.DeleteArt).Methods("DELETE")
 }
