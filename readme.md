@@ -43,9 +43,10 @@
 
 
 <h3>**Art Object  JSON Structure:**</h3>
+
 ```
 {
-    "object_id": 1,                                 //int   
+    "object_id": 1,                                 //uuid   
     "is_highlight": false,                          //bool
     "accession_year": "2024",                       //string
     "department": "The American Wing",              //string
