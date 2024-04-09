@@ -6,7 +6,7 @@
 
 - Made up of HTTP Layer, Service Layer, and Repository Layer
     - Service Layer hold business logic
-        - initiates service and routes HTTP request to correct repo action.
+        - initiates service and routes HTTP request to correct repo function.
     - HTTP layer takes incoming requests and responds appropriately
         - Implements Graceful Shutdown 
         - Implements JWT Auth for POST, UPDATE and DELETE endpoints
@@ -21,7 +21,7 @@
         - Sets up health check for DB to make sure App doesnt make requests before DB is ready
         - Sets up environment Variables for both DB & App
         - Sets network, exposes port etc...
-    - Tasker file creates shortcut commanda to do things such as run, build, test, run-app, run-db amongst others. Will expand on these at a later time.  
+    - Tasker file creates shortcut commands to do things such as run, build, test, run-app, run-db amongst others. Will expand on these at a later time.  
 
 <h3>API EndPoints</h3>
 
@@ -42,7 +42,7 @@
 - Implement k8s 
 
 
-<h3>**Art Object  JSON Structure:**</h3>
+<h3>Art Object  JSON Structure:</h3>
 
 ```
 {
