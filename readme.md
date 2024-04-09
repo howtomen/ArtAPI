@@ -2,16 +2,25 @@
 
 <h3>Goals: Create an API that can be deployed via Docker. Art API is intended to be able to process data from the Metropolitan Museum of Art Open Access CSV found here https://github.com/metmuseum/openaccess</h3>
 
-<h3>API Design</h3>
+<h3>API Design & Features</h3>
 
 - Made up of HTTP Layer, Service Layer, and Repository Layer
     - Service Layer hold business logic
+        - initiates service and routes HTTP request to correct repo action.
     - HTTP layer takes incoming requests and responds appropriately
-        - Includes Graceful Shutdown 
+        - Implements Graceful Shutdown 
+        - Implements JWT Auth for POST, UPDATE and DELETE endpoints
+        - Logrus for logging (TODO: implement logging interface and expand what events get logged and add log levels)
+        - Includes Middleware for logging(logrus), setting timeout for requests, setting JSON content type
     - Repo Layer interacts with DB
-- Comes with Dockerfile, docker compose file and Tasker File
-    - Dockerfile creates docker image and runs container after build
-    - docker compose file sets up network, declares base DB image and volumes , Env variables needed for DB and App
+- Dockerfile, docker compose file and Tasker File
+    - Dockerfile has Build Env and Deployment set up using different base images
+        - build env uses full golang image and deployment uses lighter alpine image
+    - docker compose file 
+        - Two services: DB & App.
+        - Sets up health check for DB to make sure App doesnt make requests before DB is ready
+        - Sets up environment Variables for both DB & App
+        - Sets network, exposes port etc...
     - Tasker file creates shortcut commanda to do things such as run, build, test, run-app, run-db amongst others. Will expand on these at a later time.  
 
 <h3>API EndPoints</h3>
@@ -22,16 +31,18 @@
 - /api/v3/art/{id}  PUT Updates specific Art object
 - /api/v3/art/{id}  DELETE deletes specific Art Object
 
-<h3>TODO</h3 
-    <text>           
-- Create stored procedures to address Deletion creating gap in key<br>
-- Create search based off any attribute.<br>
-- Fix update to only update fields that are provided. <br>
-    </text>
-    <br>
+<h3>TODO</h3>
+
+- Implement Logrus Logging levels and more logging aside from HTTP middleware logging
+    - implement log exporting to file which can be extracted from container
+- Implement a safer way to handle config, ports, server info, passwords and other things
+- Implement Request validation
+- Implement Tests
+- Implement CI
+- Implement k8s 
 
 
-**Art Object  JSON Structure:**
+<h3>**Art Object  JSON Structure:**</h3>
 ```
 {
     "object_id": 1,                                 //int   
