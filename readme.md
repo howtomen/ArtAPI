@@ -1,6 +1,6 @@
 <h1>Art API</h1>
 
-<h3>Goals: Create an API that can be deployed via Docker. Art API is intended to be able to process data from the Metropolitan Museum of Art Open Access CSV found here https://github.com/metmuseum/openaccess</h3>
+**Goals:** Create a production ready containerized API and db that can be deployed via Kubernetes to store and access art records. Art API is intended to be able to process data from the Metropolitan Museum of Art Open Access CSV found here https://github.com/metmuseum/openaccess.
 
 <h3>API Design & Features</h3>
 
