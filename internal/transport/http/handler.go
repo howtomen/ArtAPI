@@ -44,8 +44,8 @@ func (h *Handler) mapRoutes () {
 	h.Router.HandleFunc("/api/v3/art", h.GetAllArt).Methods("GET")
 	h.Router.HandleFunc("/api/v3/art/{id}", h.GetArt).Methods("GET")
 	h.Router.HandleFunc("/api/v3/art", JWTAuth(h.PostArt)).Methods("POST")
-	h.Router.HandleFunc("/api/v3/art/{id}", h.UpdateArt).Methods("PUT")
-	h.Router.HandleFunc("/api/v3/art/{id}", h.DeleteArt).Methods("DELETE")
+	h.Router.HandleFunc("/api/v3/art/{id}", JWTAuth(h.UpdateArt)).Methods("PUT")
+	h.Router.HandleFunc("/api/v3/art/{id}", JWTAuth(h.DeleteArt)).Methods("DELETE")
 }
 
 func (h *Handler) Serve() error {
