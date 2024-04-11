@@ -86,6 +86,11 @@ func (d *Database) GetAllArt(ctx context.Context) ([]artobj.ArtObject, error) {
 
 func (d *Database) GetArt(ctx context.Context, id string,) (artobj.ArtObject, error) {
 	var artRow ArtRow
+	_,err := uuid.Parse(id)
+	if err != nil {
+		return artobj.ArtObject{}, fmt.Errorf("invalid id input: %w", err)
+	} 
+
 	row := d.Client.QueryRowxContext(
 		ctx,
 		`SELECT *
@@ -93,7 +98,7 @@ func (d *Database) GetArt(ctx context.Context, id string,) (artobj.ArtObject, er
 		WHERE id = $1`,
 		id,
 	)
-	err := row.StructScan(&artRow) 
+	err = row.StructScan(&artRow) 
 	if err != nil {
 		return artobj.ArtObject{}, fmt.Errorf("error fetching art object by id: %w", err)
 	}
@@ -130,19 +135,28 @@ func (d *Database) DeleteArt(ctx context.Context, id string) error {
 }
 
 func (d *Database) UpdateArt(ctx context.Context, id string, art artobj.ArtObject) (artobj.ArtObject, error) {
+	_,err := uuid.Parse(id)
+	if err != nil {
+		return artobj.ArtObject{}, fmt.Errorf("invalid id input: %w", err)
+	} 
+	
 	art.ID = id
 	artRow := convertObjToRow(art)
-	rows, err := d.Client.NamedQueryContext(
+	rows, err := d.Client.NamedExecContext(
 		ctx,
 		`UPDATE art_vault SET object_id = :object_id,is_highlight = :is_highlight,accession_year = :accession_year,primary_image = :primary_image,department = :department,title = :title,object_name = :object_name,culture = :culture,period = :period,artist_display_name = :artist_display_name,city = :city,country = :country WHERE id=:id;`,
 		artRow, 
 	)
-
 	if err != nil {
 		return artobj.ArtObject{}, fmt.Errorf("failed to update comment: %w", err)
 	}
-	if err := rows.Close(); err != nil {
-		return artobj.ArtObject{}, fmt.Errorf("failed to close rows: %w", err)
+	
+	num, err := rows.RowsAffected(); if num == 0 {
+		return artobj.ArtObject{}, fmt.Errorf("failed to update comment: id %s not found", id)
+	}
+
+	if err != nil {
+		return artobj.ArtObject{}, fmt.Errorf("failed to parse rows affected: %w", err)
 	}
 	return art, nil 
 }

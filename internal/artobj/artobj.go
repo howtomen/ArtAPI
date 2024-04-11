@@ -27,19 +27,19 @@ type Store interface {
 }
 // This is an individual Art Object Record in the form of a Struct
 type ArtObject struct {
-	ID 					string 	`json:"id"` 
-	ObjectID 			int 	`json:"object_id"`
-	IsHighlight 		bool 	`json:"is_highlight"`
-	AccessionYear 		string 	`json:"accession_year"`
-	PrimaryImage 		string 	`json:"primary_image"`
-	Department 			string	`json:"department"`
-	Title 				string 	`json:"title"`
-	ObjectName 			string 	`json:"object_name"`
-	Culture	 			string 	`json:"culture"`
-	Period 				string 	`json:"period"`
-	ArtistDisplayName 	string 	`json:"artist_display_name"`
-	City 				string 	`json:"city"`
-	Country 			string 	`json:"country"`
+	ID 					string 	
+	ObjectID 			int 	
+	IsHighlight 		bool 	
+	AccessionYear 		string 	
+	PrimaryImage 		string 	
+	Department 			string	
+	Title 				string 	
+	ObjectName 			string 	
+	Culture	 			string 	
+	Period 				string 	
+	ArtistDisplayName 	string 	
+	City 				string 	
+	Country 			string 
 }
 
 //Service - the struct on which all of our logic will be built ontop of
