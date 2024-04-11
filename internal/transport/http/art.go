@@ -118,6 +118,13 @@ func (h *Handler) UpdateArt(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		return
 	}
+	
+	validate := validator.New()
+	err := validate.Struct(art)
+	if err != nil {
+		http.Error(w, "not a valid art object", http.StatusBadRequest)
+		return 
+	}
 
 	convertedArt := convertPostRequestToArtObj(art)
 	response, err := h.Service.UpdateArt(r.Context(), id, convertedArt)
