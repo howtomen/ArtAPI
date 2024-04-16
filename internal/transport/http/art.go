@@ -7,8 +7,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
 	"github.com/go-playground/validator/v10"
+	"github.com/gorilla/mux"
 )
 
 type ArtService interface {
@@ -25,17 +25,17 @@ type Response struct {
 
 type PostArtRequest struct {
 	ObjectID 			int 	`json:"object_id" validate:"required"`
-	IsHighlight 		bool 	`json:"is_highlight" validate:"required"`
-	AccessionYear 		string 	`json:"accession_year" validate:"required"`
+	IsHighlight 		bool 	`json:"is_highlight" validate:"boolean"`
+	AccessionYear 		string 	`json:"accession_year" validate:"numeric"`
 	PrimaryImage 		string 	`json:"primary_image"`
-	Department 			string	`json:"department" validate:"required"`
+	Department 			string	`json:"department"`
 	Title 				string 	`json:"title" validate:"required"`
 	ObjectName 			string 	`json:"object_name" validate:"required"`
-	Culture	 			string 	`json:"culture" validate:"required"`
-	Period 				string 	`json:"period" validate:"required"`
+	Culture	 			string 	`json:"culture"`
+	Period 				string 	`json:"period"`
 	ArtistDisplayName 	string 	`json:"artist_display_name" validate:"required"`
-	City 				string 	`json:"city" validate:"required"`
-	Country 			string 	`json:"country" validate:"required"`
+	City 				string 	`json:"city"`
+	Country 			string 	`json:"country"`
 }
 
 func convertPostRequestToArtObj (req PostArtRequest) (artobj.ArtObject) {
@@ -93,6 +93,7 @@ func (h *Handler) PostArt(w http.ResponseWriter, r *http.Request) {
 	validate := validator.New()
 	err := validate.Struct(art)
 	if err != nil {
+		log.Print(err)
 		http.Error(w, "not a valid art object", http.StatusBadRequest)
 		return 
 	}
@@ -118,11 +119,12 @@ func (h *Handler) UpdateArt(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		return
 	}
-	
+
 	validate := validator.New()
 	err := validate.Struct(art)
 	if err != nil {
-		http.Error(w, "not a valid art object", http.StatusBadRequest)
+		log.Print(err)
+		http.Error(w, "not a valid art object" , http.StatusBadRequest)
 		return 
 	}
 

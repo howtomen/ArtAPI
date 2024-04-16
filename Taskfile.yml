@@ -1,9 +1,15 @@
 version: '3'
 
 tasks:
-  build:
+  build-local:
     cmds:
       - go build -o app cmd/server/main.go
+  build-api:
+    cmds:
+      - docker compose up api --build
+  build-db:
+    cmds:
+      - docker compose up db --build
   test:
     cmds:
       - go test -v ./...
