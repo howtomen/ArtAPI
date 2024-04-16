@@ -2,7 +2,6 @@ package http
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -38,9 +37,6 @@ func NewHandler(service ArtService) *Handler {
 }
 
 func (h *Handler) mapRoutes () {
-	h.Router.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "hello world")
-	})
 	h.Router.HandleFunc("/api/v3/art", h.GetAllArt).Methods("GET")
 	h.Router.HandleFunc("/api/v3/art/{id}", h.GetArt).Methods("GET")
 	h.Router.HandleFunc("/api/v3/art", JWTAuth(h.PostArt)).Methods("POST")
@@ -63,7 +59,10 @@ func (h *Handler) Serve() error {
 	// this should handle shutdown but by default waits indefinitely
 	// we defer cancel so that it doesnt hang 
 	defer cancel() 
-	h.Server.Shutdown(ctx)
+	err := h.Server.Shutdown(ctx)
+	if err != nil {
+		log.Print(err)
+	}
 
 	log.Println("shut down gracefully")
 	return nil 

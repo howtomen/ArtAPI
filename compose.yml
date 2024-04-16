@@ -30,6 +30,8 @@ services:
       DB_TABLE: "postgres"
       DB_PORT: "5432"
       SSL_MODE: "disable"
+      LOG_LEVEL: "-1"
+      APP_ENV: "dev"
     ports:
       - "8000:8000"
     depends_on:

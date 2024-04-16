@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	log "github.com/sirupsen/logrus"
+	logger "ArtAPI/util/logging"
 )
 
 func JSONMiddleware(next http.Handler) http.Handler {
@@ -17,11 +17,19 @@ func JSONMiddleware(next http.Handler) http.Handler {
 
 func LoggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
-		log.WithFields(
-			log.Fields{
-				"method": r.Method,
-				"path": r.URL.Path,
-			}).Info("handled request")
+		start := time.Now()
+		l := logger.GetLogger()
+		//defer log in order to still get entry when panic occurs down stream
+		defer func () { 
+			l.
+				Info().
+				Str("method", r.Method).
+				Str("url", r.URL.RequestURI()).
+				Str("user_agent", r.UserAgent()). 
+				Dur("elapsed_ms", time.Since(start)).
+				Msg("incoming request")
+		}()
+
 		next.ServeHTTP(w, r)
 	})
 }

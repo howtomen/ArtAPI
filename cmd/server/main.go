@@ -3,18 +3,19 @@ package main
 import (
 	db "ArtAPI/internal/DB"
 	"ArtAPI/internal/artobj"
+	logger "ArtAPI/util/logging"
 	transportHttp "ArtAPI/internal/transport/http"
-	"fmt"
 )
 func Run() error {
-	fmt.Println("Starting up App Application")
+	l := logger.GetLogger()
+	l.Info().Msg("Starting up App Application")
 	db, err := db.NewDbConnection()
 	if err != nil {
-		fmt.Println("Failed to connect to DB")
+		l.Info().Msg("Unable to connect to DB")
 		return err
 	}
 	if err := db.MigrateDB(); err != nil {
-		fmt.Println("failed to migrate db")
+		l.Info().Msg("failed to migrate db")
 		return err 
 	}
 
@@ -28,7 +29,8 @@ func Run() error {
 	return nil
 }
 func main() {
+	l := logger.GetLogger()
 	if err := Run(); err != nil {
-		fmt.Println(err)
+		l.Fatal().Err(err).Msg("Art API has encountered an issue and is shutting down.")
 	}
 }
