@@ -50,9 +50,9 @@
 ```
 {
     "ID": "b8b907d0-331c-48df-88ea-580355ba6dc5",   //uuid
-    "object_id": 1,                                 //int; validates numeric; required
+    "object_id": 1,                                 //int; numeric; required
     "is_highlight": false,                          //bool
-    "accession_year": "2024",                       //string; validates numeric
+    "accession_year": "2024",                       //string; numeric
     "department": "The American Wing",              //string
     "title": "One-dollar Liberty Head Coin",        //string; required
     "object_name": "Coin",                          //string; required
