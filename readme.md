@@ -9,9 +9,11 @@
         - initiates service and routes HTTP request to correct repo function.
     - HTTP layer takes incoming requests and responds appropriately
         - Implements Graceful Shutdown 
-        - Implements JWT Auth for POST, UPDATE and DELETE endpoints
-        - Logrus for logging (TODO: implement logging interface and expand what events get logged and add log levels)
-        - Includes Middleware for logging(logrus), setting timeout for requests, setting JSON content type
+        - Implements **JWT Auth** for POST, UPDATE and DELETE endpoints
+        - **ZeroLog** for logging with Request ID, elapsed time, method accessed, status code, and user agent. Also set up to provide debugging info and write to console and log file. Log file would be used in production and saved to be processed by another service (datadog etc...)
+            - ZeroLog is passed within context throughout the application.
+        - Includes Middleware for logging(Zerolog), setting timeout for requests, setting JSON content type
+        - input is validated using **validatorv10** 
     - Repo Layer interacts with DB
 - Dockerfile, docker compose file and Tasker File
     - Dockerfile has Build Env and Deployment set up using different base images
@@ -33,13 +35,14 @@
 
 <h3>TODO</h3>
 
-- Implement Logrus Logging levels and more logging aside from HTTP middleware logging
-    - implement log exporting to file which can be extracted from container
+- ~~Implement Logrus Logging levels and more logging aside from HTTP middleware logging~~
+    - ~~implement log exporting to file which can be extracted from container~~
 - Implement a safer way to handle config, ports, server info, passwords and other things
-- Implement Request validation
+- ~~Implement Request validation~~
 - Implement Tests
 - Implement CI
 - Implement k8s 
+- Finish implementing Search endpoint
 
 
 <h3>Art Object  JSON Structure:</h3>
