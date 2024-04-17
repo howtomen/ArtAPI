@@ -49,15 +49,16 @@
 
 ```
 {
-    "object_id": 1,                                 //uuid   
+    "ID": "b8b907d0-331c-48df-88ea-580355ba6dc5",   //uuid
+    "object_id": 1,                                 //int; validates numeric; required
     "is_highlight": false,                          //bool
-    "accession_year": "2024",                       //string
+    "accession_year": "2024",                       //string; validates numeric
     "department": "The American Wing",              //string
-    "title": "One-dollar Liberty Head Coin",        //string
-    "object_name": "Coin",                          //string
+    "title": "One-dollar Liberty Head Coin",        //string; required
+    "object_name": "Coin",                          //string; required
     "culture": "American",                          //string
     "period": "Modern",                             //string
-    "artist_display_name": "James Barton Longacre", //string
+    "artist_display_name": "James Barton Longacre", //string; required
     "city": "New York",                             //string 
     "country": "Unites States"                      //string 
 }
