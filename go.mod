@@ -10,8 +10,8 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/lib/pq v1.10.9
+	github.com/rs/xid v1.5.0
 	github.com/rs/zerolog v1.32.0
-	github.com/sirupsen/logrus v1.9.2
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 

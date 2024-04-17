@@ -1,6 +1,7 @@
 package db
 
 import (
+	logger "ArtAPI/util/logging"
 	"errors"
 	"fmt"
 
@@ -11,7 +12,8 @@ import (
 )
 
 func (d *Database) MigrateDB() error {
-	fmt.Println("Checking for Database and migrating if missing")
+	l := logger.GetLogger()
+	l.Info().Msg("Checking for Database and migrating if missing")
 
 	driver, err := postgres.WithInstance(d.Client.DB, &postgres.Config{})
 	if err != nil {
@@ -24,7 +26,7 @@ func (d *Database) MigrateDB() error {
 		driver,
 	)
 	if err != nil {
-		fmt.Println(err)
+		l.Debug().Err(err).Msg("")
 		return err
 	}
 
@@ -34,6 +36,6 @@ func (d *Database) MigrateDB() error {
 		}
 	}
 
-	fmt.Println("successfully connected found or migrated database")
+	l.Info().Msg("successfully found or migrated database")
 	return nil
 }

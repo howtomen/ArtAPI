@@ -15,7 +15,7 @@ var once sync.Once
 var log zerolog.Logger
 
 func GetLogger() zerolog.Logger {
-	once.Do(func () {
+	once.Do(func () { //makes sure logger only gets initialized once
 		zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 		zerolog.TimeFieldFormat = time.RFC3339Nano
 
@@ -28,7 +28,7 @@ func GetLogger() zerolog.Logger {
 			TimeFormat: time.RFC3339,
 		}
 
-		if os.Getenv("APP_ENV") != "dev" { //store prod logs 
+		if os.Getenv("APP_ENV") != "dev" { //store prod logs to file 
 			fileLogger := &lumberjack.Logger{
 				Filename: "art-api.log",
 				MaxSize: 5, //max MB size of log before it gets rotated

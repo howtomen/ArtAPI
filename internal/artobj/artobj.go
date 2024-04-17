@@ -3,7 +3,8 @@ package artobj
 import (
 	"context"
 	"errors"
-	"fmt"
+
+	"github.com/rs/zerolog"
 )
 
 // using these to pass info on what went wrong
@@ -55,10 +56,11 @@ func NewService(store Store) *Service {
 }
 
 func (s *Service) GetAllArt(ctx context.Context) ([]ArtObject, error) {
-	fmt.Println("Getting All Art Objects in vault") 
+	l := zerolog.Ctx(ctx)
+	l.Info().Msg("Getting All Art")
 	art, err := s.Store.GetAllArt(ctx)
 	if err != nil{
-		fmt.Println(err)
+		l.Debug().Err(err).Msg("")
 		return []ArtObject{}, ErrFetchingAllArt
 	}
 
@@ -66,10 +68,11 @@ func (s *Service) GetAllArt(ctx context.Context) ([]ArtObject, error) {
 }
 
 func (s *Service) GetArt(ctx context.Context, id string) (ArtObject, error) {
-	fmt.Println("Getting Art Object")
+	l := zerolog.Ctx(ctx)
+	l.Info().Msg("Getting Art Object")
 	art, err := s.Store.GetArt(ctx,id)
 	if err != nil {
-		fmt.Println(err)
+		l.Debug().Err(err).Msg("")
 		return ArtObject{},ErrFetchingArt 
 	}
 	
@@ -77,25 +80,28 @@ func (s *Service) GetArt(ctx context.Context, id string) (ArtObject, error) {
 }
 
 func (s *Service) UpdateArt(ctx context.Context, id string, art ArtObject) (ArtObject, error) {
-	fmt.Println("Updating Art Object")
+	l := zerolog.Ctx(ctx)
+	l.Info().Msg("Updating Art Object")
 	response, err := s.Store.UpdateArt(ctx,id,art)
 	if err != nil {
-		fmt.Println(err)
+		l.Debug().Err(err).Msg("")
 		return ArtObject{},ErrUpdatingRow
 	}
 	return response, nil  
 }
 
 func (s *Service) DeleteArt(ctx context.Context, id string) error {
-	fmt.Println("Deleting Art Object")
+	l := zerolog.Ctx(ctx)
+	l.Info().Msg("Deleting Art Object")
 	return s.Store.DeleteArt(ctx, id)
 }
 
 func (s *Service) PostArt(ctx context.Context, art ArtObject) (ArtObject, error) {
-	fmt.Println("Posting Art Object")
+	l := zerolog.Ctx(ctx)
+	l.Info().Msg("Posting Art Object")
 	res, err := s.Store.PostArt(ctx,art)
 	if err != nil {
-		fmt.Println(err)
+		l.Debug().Err(err).Msg("")
 		return ArtObject{}, ErrPostingArt
 	}
 	return res, nil

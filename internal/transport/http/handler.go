@@ -2,7 +2,7 @@ package http
 
 import (
 	"context"
-	"log"
+	logger "ArtAPI/util/logging"
 	"net/http"
 	"os"
 	"os/signal"
@@ -45,9 +45,10 @@ func (h *Handler) mapRoutes () {
 }
 
 func (h *Handler) Serve() error {
+	l := logger.GetLogger()
 	go func() {
 		if err := h.Server.ListenAndServe(); err != nil {
-			log.Println(err.Error())
+			l.Info().Err(err).Msg("")
 		}
 	}()
 	
@@ -61,9 +62,9 @@ func (h *Handler) Serve() error {
 	defer cancel() 
 	err := h.Server.Shutdown(ctx)
 	if err != nil {
-		log.Print(err)
+		l.Info().Err(err).Msg("s")
 	}
 
-	log.Println("shut down gracefully")
+	l.Info().Msg("shut down gracefully")
 	return nil 
 }
