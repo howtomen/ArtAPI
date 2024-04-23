@@ -52,7 +52,7 @@ BEGIN
     WHERE id = NEW.id;
   ELSIF TG_OP = 'DELETE' THEN
     DELETE FROM search_idx
-    WHERE uuid = OLD.id;
+    WHERE id = OLD.id;
   END IF;
   RETURN NEW;
 END;

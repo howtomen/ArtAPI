@@ -3,7 +3,16 @@ version: '3'
 tasks:
   build-local:
     cmds:
-      - go build -o app cmd/server/main.go
+      - go build -o app.exe cmd/server/main.go
+      - ./app.exe
+    env:
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_TABLE: postgres
+      DB_HOST: localhost
+      DB_DB: postgres
+      DB_PORT: 5432
+      SSL_MODE: disable 
   build-api:
     cmds:
       - docker compose up api --build
@@ -25,4 +34,17 @@ tasks:
   run-app:
     cmds:
     - docker-compose up api -d
+  integration-test:
+    cmds:
+      - docker-compose up -d db
+      - go test -tags=integration -v ./...
+    env:
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_TABLE: postgres
+      DB_HOST: localhost
+      DB_DB: postgres
+      DB_PORT: 5432
+      SSL_MODE: disable
+
       

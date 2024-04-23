@@ -3,7 +3,6 @@ package db
 import (
 	"context"
 	"fmt"
-	// "log"
 	"os"
 
 	_ "github.com/lib/pq"
