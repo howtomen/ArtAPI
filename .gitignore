@@ -1,1 +1,3 @@
 /.vscode
+cmd/server/art-api.log
+.gitignore
